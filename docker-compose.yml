@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  one-service:
+    build:
+      context: ./one-service
+      target: dev_image
+    env_file:
+      - shared.env
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./one-service/source:/app
+
+  two-service:
+    build:
+      context: ./two-service
+      target: dev_image
+    env_file:
+      - shared.env
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./two-service/source:/app
+
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    restart: always
+    env_file:
+      - shared.env
+    ports:
+      - "15672:15672"
